@@ -10,7 +10,7 @@ import requests
 from time import sleep
 from ping3 import ping
 
-__version__ = '0.0.2'
+__version__ = '0.0.4'
 
 app_api_dict = {
     "GPT3.5": 'fastgpt-ZadxgXx4pZV4OqSyi7dcYHambSq',
