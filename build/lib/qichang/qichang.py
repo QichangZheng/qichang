@@ -10,7 +10,7 @@ import requests
 from time import sleep
 from ping3 import ping
 
-__version__ = '0.0.6'
+__version__ = '0.0.9'
 
 app_api_dict = {
     "GPT3.5": 'fastgpt-ZadxgXx4pZV4OqSyi7dcYHambSq',
@@ -41,7 +41,13 @@ class LLM_API:
             'Virginia': '54.159.212.206',
             'Singapore': '47.236.36.36',
         }
-        self.server = self.select_server()
+        try:
+            self.server = self.select_server()
+        except:
+            print(f'Auto server selection failed, using default server Virginia, '
+                  'you can also select server manually by setting self.server == "Singapore",'
+                  'available servers: {list(self.server_dict.keys())}')
+
 
     def select_server(self):
         # Initialize a dictionary to store ping results
@@ -54,21 +60,18 @@ class LLM_API:
                 ping_results[server_name] = ping_result
 
         # Find the server with the lowest ping
-        if ping_results:
-            lowest_ping_server = min(ping_results, key=ping_results.get)
-            lowest_ping = ping_results[lowest_ping_server]
+        lowest_ping_server = min(ping_results, key=ping_results.get)
+        lowest_ping = ping_results[lowest_ping_server]
 
-            # Print the ping results
-            print("Ping")
-            for server_name, ping_time in ping_results.items():
-                print(f"{server_name}: {ping_time:.2f} ms")
+        # Print the ping results
+        print("Ping")
+        for server_name, ping_time in ping_results.items():
+            print(f"{server_name}: {ping_time:.2f} ms")
 
-            # Print the server with the lowest ping
-            print(f"{lowest_ping_server} with lowest ping ({lowest_ping:.2f} ms) selected.")
-            return lowest_ping_server
-        else:
-            print("No servers could be pinged, please check your internet connection.")
-            return None
+        # Print the server with the lowest ping
+        print(f"{lowest_ping_server} with lowest ping ({lowest_ping:.2f} ms) selected.")
+        return lowest_ping_server
+
 
     def chat(self, app_or_key, message, chatId=None):
         if app_or_key.startswith('fastgpt-'):
