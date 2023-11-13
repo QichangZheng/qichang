@@ -1,8 +1,9 @@
 from setuptools import setup, find_packages
+from qichang import qichang
 
 setup(
     name='qichang',
-    version='0.0.5',
+    version=qichang.__version__,
     author='Qichang Zheng',
     author_email='qichangzheng@uchicago.edu',
     description='A Python library for interacting with various language model APIs',
