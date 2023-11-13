@@ -10,7 +10,7 @@ import requests
 from time import sleep
 from ping3 import ping
 
-__version__ = '0.0.9'
+__version__ = '0.0.10'
 
 app_api_dict = {
     "GPT3.5": 'fastgpt-ZadxgXx4pZV4OqSyi7dcYHambSq',
@@ -45,8 +45,8 @@ class LLM_API:
             self.server = self.select_server()
         except:
             print(f'Auto server selection failed, using default server Virginia, '
-                  'you can also select server manually by setting self.server == "Singapore",'
-                  'available servers: {list(self.server_dict.keys())}')
+                  f'you can also select server manually by setting self.server == "Singapore",'
+                  f'available servers: {list(self.server_dict.keys())}')
 
 
     def select_server(self):
