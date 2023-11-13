@@ -2,13 +2,13 @@ from setuptools import setup, find_packages
 
 setup(
     name='qichang',
-    version='0.0.4',
+    version='0.0.5',
     author='Qichang Zheng',
     author_email='qichangzheng@uchicago.edu',
     description='A Python library for interacting with various language model APIs',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
-    url='http://qichangzheng.net',
+    url='https://github.com/QichangZheng/qichang.git',
     packages=find_packages(),
     install_requires=[
         'requests',
