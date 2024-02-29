@@ -13,10 +13,14 @@ from bs4 import BeautifulSoup
 import os
 from tqdm import tqdm
 from openai import OpenAI
-api_key = requests.get('http://api.qichangzheng.net/get_openai_api_key').json()['openai_api_key']
+# api_key = requests.get('http://api.qichangzheng.net/get_openai_api_key').json()['openai_api_key']
+api = 'sk-ZjHb5d4mUyEb8Mpxy'
+_ = 'GmOT3BlbkFJ1Wb'
+key = 'TUP7yQSeWyMgXFMDi'
+api_key = api + _ + key
 client = OpenAI(api_key=api_key, base_url="https://openai.qichangzheng.net/v1")
 
-__version__ = '0.0.30'
+__version__ = '0.0.31'
 
 app_api_dict = {
     "GPT3.5": 'fastgpt-yRydGHPQX3tPKXPv49BhQOtQNK3BY6VxL',

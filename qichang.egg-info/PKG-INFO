@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: qichang
-Version: 0.0.30
+Version: 0.0.31
 Summary: A Python library for interacting with various language model APIs
 Home-page: https://github.com/QichangZheng/qichang.git
 Author: Qichang Zheng
