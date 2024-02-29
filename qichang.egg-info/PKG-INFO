@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: qichang
-Version: 0.0.10
+Version: 0.0.30
 Summary: A Python library for interacting with various language model APIs
 Home-page: https://github.com/QichangZheng/qichang.git
 Author: Qichang Zheng
@@ -16,11 +16,15 @@ Classifier: Programming Language :: Python :: 3.7
 Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
 Requires-Python: >=3.7
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: requests
 Requires-Dist: ping3
+Requires-Dist: bs4
+Requires-Dist: tqdm
+Requires-Dist: openai==1.5.0
 
 # This is a personal library developed by Qichang Zheng.
 ## Installation

@@ -13,7 +13,10 @@ setup(
     packages=find_packages(),
     install_requires=[
         'requests',
-        'ping3'
+        'ping3',
+        'bs4',
+        'tqdm',
+        'openai==1.5.0',
     ],
     license='Apache License 2.0',
     classifiers=[
@@ -26,6 +29,7 @@ setup(
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
     ],
     keywords='language models API client',
     python_requires='>=3.7',

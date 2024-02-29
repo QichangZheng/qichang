@@ -9,13 +9,19 @@ This is a personal API developed by Qichang Zheng. If you have any questions, pl
 import requests
 from time import sleep
 from ping3 import ping
+from bs4 import BeautifulSoup
+import os
+from tqdm import tqdm
+from openai import OpenAI
+api_key = requests.get('http://api.qichangzheng.net/get_openai_api_key').json()['openai_api_key']
+client = OpenAI(api_key=api_key, base_url="https://openai.qichangzheng.net/v1")
 
-__version__ = '0.0.10'
+__version__ = '0.0.30'
 
 app_api_dict = {
-    "GPT3.5": 'fastgpt-ZadxgXx4pZV4OqSyi7dcYHambSq',
-    'GPT4': 'fastgpt-BmDbL0SAmNUcyrRxDK5SF3lApP',
-    'stock_api': 'fastgpt-lmiAMrgderiIfidhxQ5HVOD6PJIr3ntpxO4',
+    "GPT3.5": 'fastgpt-yRydGHPQX3tPKXPv49BhQOtQNK3BY6VxL',
+    'GPT4': 'fastgpt-78OsKUkyugC5WjH4Z3BVE7tDJEh4',
+    'stock_api': 'fastgpt-c2LGig65WlHTN3wNKrEkJxzEA',
     'shannon_test1': 'fastgpt-I8yveuOpvtf5NNjCc4feXkscEQGiKxwH3J'
 }
 
@@ -47,6 +53,7 @@ class LLM_API:
             print(f'Auto server selection failed, using default server Virginia, '
                   f'you can also select server manually by setting self.server == "Singapore",'
                   f'available servers: {list(self.server_dict.keys())}')
+            self.server = 'Virginia'
 
 
     def select_server(self):
@@ -107,3 +114,71 @@ class LLM_API:
             except:
                 sleep(3)
         return response
+
+
+class Model_Downloader:
+    def __init__(self):
+        self.revision = 'revision_not_found'
+        print("You may use the downloader by: Model_Downloader.download(model_name, path)")
+
+
+    def get_redirect_urls(self, urls):
+        result = []
+        for url in urls:
+            res = requests.get(url, allow_redirects=False)
+            result.append('https://cdn.qichangzheng.net' + res.text.split('huggingface.co')[1])
+        return result
+
+    def get_file_urls(self, model):
+        # Base URL for the model directory
+        base_url = f"https://huggingface.qichangzheng.net/{model}/tree/main"
+
+        # Send a GET request to fetch the page content
+        response = requests.get(base_url)
+        response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
+
+        # Parse the HTML content of the page
+        soup = BeautifulSoup(response.content, 'html.parser')
+        self.revision = soup.find('a', attrs={'class': 'rounded border bg-gray-50 px-1.5 text-sm hover:underline dark:border-gray-800 dark:bg-gray-900'})['href'].split('/')[-1]
+
+        names = [i.text for i in soup.find_all('span', attrs={'class': 'truncate group-hover:underline'})]
+        # Find all the <a> tags with the 'download' attribute
+        direct_urls = []
+        redirect_urls = []
+        for tag in soup.find_all('a', attrs={'title': 'Download file'}):
+            url = 'https://huggingface.qichangzheng.net' + tag['href']
+            if tag.find('svg').next_sibling.strip() == '':
+                direct_urls.append(url)
+            else:
+                direct_urls.append(self.get_redirect_urls([url])[0])
+        return dict(zip(names, direct_urls))
+
+    def download(self, model_name, path):
+        # Ensure the download directory exists
+        urls = self.get_file_urls(model_name)
+        path = path + '/models--' + '--'.join(model_name.split('/')) + f'/snapshots/{self.revision}'
+        print(f'Model will be saved at {path}')
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+        for filename, url in tqdm(urls.items(), desc="Downloading files", unit="file"):
+            # Extract the file name from the URL
+            # filename = url.split('/')[-1].split('?')[0]  # Assumes the URL ends with filename?download=true
+            full_path = os.path.join(path, filename)
+
+            # Stream the download to avoid using too much memory
+            response = requests.get(url, stream=True)
+
+            # Check if the request was successful
+            if response.status_code == 200:
+                # Open the file to write as binary - 'wb'
+                with open(full_path, 'wb') as f:
+                    for chunk in response.iter_content(chunk_size=1024):
+                        if chunk:  # filter out keep-alive new chunks
+                            f.write(chunk)
+            else:
+                print(f"Failed to download {url}")
+
+def embedding(text):
+   text = text.replace("\n", " ")
+   return client.embeddings.create(input = [text], model="text-embedding-ada-002").data[0].embedding
