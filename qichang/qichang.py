@@ -13,14 +13,8 @@ from bs4 import BeautifulSoup
 import os
 from tqdm import tqdm
 from openai import OpenAI
-# api_key = requests.get('http://api.qichangzheng.net/get_openai_api_key').json()['openai_api_key']
-api = 'sk-ZjHb5d4mUyEb8Mpxy'
-_ = 'GmOT3BlbkFJ1Wb'
-key = 'TUP7yQSeWyMgXFMDi'
-api_key = api + _ + key
-client = OpenAI(api_key=api_key, base_url="https://openai.qichangzheng.net/v1")
 
-__version__ = '0.0.31'
+__version__ = '0.0.32'
 
 app_api_dict = {
     "GPT3.5": 'fastgpt-yRydGHPQX3tPKXPv49BhQOtQNK3BY6VxL',
@@ -183,6 +177,16 @@ class Model_Downloader:
             else:
                 print(f"Failed to download {url}")
 
-def embedding(text):
-   text = text.replace("\n", " ")
-   return client.embeddings.create(input = [text], model="text-embedding-ada-002").data[0].embedding
+class Embedder:
+    def __init__(self):
+        try:
+            self.api_key = os.environ['OPENAI_API_KEY']
+        except:
+            raise KeyError(
+                'OpenAI API key not found, please set the environment variable OPENAI_API_KEY by os.environ["OPENAI_API_KEY"] = "your_api_key"')
+        self.client = OpenAI(api_key=self.api_key, base_url="https://openai.qichangzheng.net/v1")
+        pass
+
+    def embedding(self, text):
+        text = text.replace("\n", " ")
+        return self.client.embeddings.create(input=[text], model="text-embedding-ada-002").data[0].embedding
