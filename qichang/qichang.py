@@ -14,7 +14,7 @@ import os
 from tqdm import tqdm
 from openai import OpenAI
 
-__version__ = '0.0.32'
+__version__ = '0.0.33'
 
 app_api_dict = {
     "GPT3.5": 'fastgpt-yRydGHPQX3tPKXPv49BhQOtQNK3BY6VxL',
