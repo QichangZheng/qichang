@@ -8,7 +8,7 @@ pip install qichang
 ### For single conversation
 ```python
 import qichang
-llm = qichang.LLM()
+llm = qichang.LLM_API()
 llm.chat('GPT3.5', 'Hello, how are you?')
 llm.chat('GPT4', 'Hello, how are you?')
 ```
@@ -17,7 +17,7 @@ llm.chat('GPT4', 'Hello, how are you?')
 #### We currently have two servers in Virginia and Singapore. This function will automatically choose the server with the lowest latency, but you can also manually set the server.
 ```python
 import qichang
-llm = qichang.LLM()
+llm = qichang.LLM_API()
 # Manually set the server
 # llm.server = 'Virginia'
 # llm.server = 'Singapore'
