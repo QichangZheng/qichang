@@ -30,7 +30,7 @@ llm.chat('GPT4', 'What did I just asked?', 'ChatID')
 #### This is a tool to download the huggingface models in China. Note that this function only works for some models, the author is working on further improvement.
 ```python
 import qichang
-downloader = qichang.ModelDownloader()
+downloader = qichang.Model_Downloader()
 downloader.download('Qwen/Qwen-7B-Chat', 'test') # Download the model to the folder 'test'
 ```
 
